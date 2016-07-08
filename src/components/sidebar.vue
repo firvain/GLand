@@ -1,8 +1,5 @@
 <template lang="html">
   <div>
-    <p>
-      {{ lang }}
-    </p>
     <nav class="actions">
       <mdl-tooltip for="actions-advanced">{{{ $t('navigation.advancedSearch') }}}</mdl-tooltip>
       <mdl-button icon='true' v-link="{ path: 'advanced-search' }" id="actions-advanced"><i class="mdi mdi-google-circles-extended"></i></mdl-button>
@@ -13,10 +10,10 @@
   </div>
 </template>
 <script>
+  import Vue from 'vue';
   import advancedSearch from './advanced-search';
   import { changeLanguage } from '../vuex/actions';
   import { getLanguage } from '../vuex/getters';
- // const getLanguage = state => state.lang;
   export default {
     // Options / Data
     data() {
@@ -27,9 +24,15 @@
     computed: {},
     methods: {
       ch() {
-        this.changeLanguage('en');
+        if (this.getLanguage === 'el') {
+          Vue.config.lang = 'en';
+          this.changeLanguage('en');
+        } else {
+          Vue.config.lang = 'el';
+          this.changeLanguage('el');
+        }
       },
-    }, // ,
+    },
     // watch: {},
     // Options / DOM
     // el () {},
@@ -62,7 +65,7 @@
     // name: ''
     vuex: {
       getters: {
-        lang: getLanguage,
+        getLanguage,
       },
       actions: {
         changeLanguage,

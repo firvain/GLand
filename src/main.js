@@ -3,8 +3,8 @@ import App from './App';
 import VueRouter from 'vue-router';
 import VueMdl from 'vue-mdl';
 import VueI18n from 'vue-i18n';
-// import { sync } from 'vuex-router-sync';
-// import store from './vuex/store';
+import { sync } from 'vuex-router-sync';
+import store from './vuex/store';
 Vue.use(VueI18n);
 Vue.use(VueRouter);
 Vue.use(VueMdl);
@@ -16,7 +16,7 @@ const locales = {
   en: {
     language: {
       en: 'English',
-      gr: 'Greek',
+      el: 'Greek',
       switchLang: 'Switch Language',
     },
     navigation: {
@@ -27,10 +27,10 @@ const locales = {
       hello: 'hello world',
     },
   },
-  gr: {
+  el: {
     language: {
       en: 'Αγγλικά',
-      gr: 'Ελληνικά',
+      el: 'Ελληνικά',
       switchLang: 'Αλλαγή Γλώσσας',
     },
     navigation: {
@@ -43,7 +43,7 @@ const locales = {
   },
 };
 
-Vue.config.lang = 'gr';
+Vue.config.lang = 'el';
 
 Object.keys(locales).forEach((lang) => {
   Vue.locale(lang, locales[lang]);
@@ -56,5 +56,5 @@ router.map({
     name: 'advanced-search',
   },
 });
-// sync(store, router);
+sync(store, router);
 router.start(App, '#app');
