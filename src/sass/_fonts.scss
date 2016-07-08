@@ -1,0 +1,33 @@
+
+@mixin font-face($font-family, $file-path, $font-weight, $font-style) {
+  @font-face {
+    font-family: $font-family;
+    src: url('#{$file-path}.ttf') format("truetype");
+    font-weight: $font-weight;
+    font-style: $font-style;
+  }
+}
+
+@mixin roboto-light {
+  font-family: 'Roboto-Light', arial, sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+@mixin roboto-regular {
+  font-family: 'Roboto-Regular', arial, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+@mixin roboto-black {
+  font-family: 'Roboto-Black', arial, sans-serif;
+  font-weight: 900;
+  font-style: normal;
+}
+
+// https://css-tricks.com/snippets/css/less-mixin-for-rem-font-sizing/
+@mixin font-size($size-value: 1.6) {
+  font-size: ($size-value * 10) + px;
+  font-size: $size-value + rem;
+}

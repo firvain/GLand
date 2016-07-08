@@ -1,64 +1,95 @@
 <template>
-  <div id="app">
-    <img class="logo" src="./assets/logo.png">
-    <hello></hello>
-    <p>
-      Welcome to your Vue.js app!
-    </p>
-    <p>
-      To get a better understanding of how this boilerplate works, check out
-      <a href="http://vuejs-templates.github.io/webpack" target="_blank">its documentation</a>.
-      It is also recommended to go through the docs for
-      <a href="http://webpack.github.io/" target="_blank">Webpack</a> and
-      <a href="http://vuejs.github.io/vue-loader/" target="_blank">vue-loader</a>.
-      If you have any issues with the setup, please file an issue at this boilerplate's
-      <a href="https://github.com/vuejs-templates/webpack" target="_blank">repository</a>.
-    </p>
-    <p>
-      You may also want to checkout
-      <a href="https://github.com/vuejs/vue-router/" target="_blank">vue-router</a> for routing and
-      <a href="https://github.com/vuejs/vuex/" target="_blank">vuex</a> for state management.
-    </p>
+  <div id="app" class="app">
+    <div class="flex-wrapper full">
+      <sidebar class="left"></sidebar>
+      <map class="right"></map>
+    </div>
+    <loader :active='showLoader' ></loader>
   </div>
 </template>
 
-<script>
-import Hello from './components/Hello';
-
+<script type="text/babel">
+import 'material-design-lite';
+import 'mdi';
+import loader from './components/Loader';
+import map from './components/map';
+import sidebar from './components/sidebar';
+import store from './vuex/store';
 export default {
+  name: 'app',
+  store,
+  data() {
+    return {
+      showLoader: true,
+    };
+  },
   components: {
-    Hello,
+    loader,
+    sidebar,
+    map,
+  },
+  ready() {
+    this.removeLoader();
+  },
+  methods: {
+    removeLoader() {
+      this.showLoader = false;
+    },
   },
 };
 </script>
 
-<style>
+<style lang="scss">
+@import "~normalize.css/normalize.css";
+@import "~material-design-lite/dist/material.blue_grey-red.min";
+@import "./sass/_fonts";
+
+@include font-face(roboto-light, './assets/fonts/Roboto-Light', 300, normal);
+@include font-face(roboto-regular, './assets/fonts/Roboto-Regular', 400, normal);
+@include font-face(roboto-black, './assets/fonts/Roboto-Black', 900, normal);
+
 html {
   height: 100%;
+  box-sizing: border-box;
+  font-size: 62.5% // https://css-tricks.com/snippets/css/less-mixin-for-rem-font-sizing/
 }
 
 body {
+  @include roboto-regular;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  @include font-size(1.6);
+}
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+.app {
+  height: 100%;
+  width: 100%;
+
+}
+.flex-wrapper {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+}
+.full {
+  height: 100%;
+  // height: 100vh;
+  width: 100%;
+  // width: 100vw;
+}
+.left {
+  flex: 1 0 30%;
+  width: 100%;
   height: 100%;
 }
-
-#app {
-  color: #2c3e50;
-  margin-top: -100px;
-  max-width: 600px;
-  font-family: Source Sans Pro, Helvetica, sans-serif;
-  text-align: center;
-}
-
-#app a {
-  color: #42b983;
-  text-decoration: none;
-}
-
-.logo {
-  width: 100px;
-  height: 100px
+.right {
+  flex: 1 0 70%;
+  width: 100%;
+  height: 100%;
 }
 </style>
