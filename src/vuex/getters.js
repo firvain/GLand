@@ -1,1 +1,1 @@
-export const getLanguage = state => state.language; // eslint-disable-line
+export const getLanguage = state => state.language.active; // eslint-disable-line

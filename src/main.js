@@ -17,12 +17,25 @@ const locales = {
     language: {
       en: 'English',
       el: 'Greek',
-      switchLang: 'Switch Language',
     },
     navigation: {
       search: 'Search',
       advancedSearch: 'Advanced Search',
+      toggleLanguage: 'Switch Language',
+      home: 'Home',
+      back: 'Go Back',
     },
+    estate: {
+      category: {
+        description: {
+          apartment: 'Apartment',
+          maisonete: 'Maisonette',
+          detached_house: 'Detached House',
+          villa: 'Villa',
+        },
+      },
+    },
+    advancedOptions: 'Advanced Options',
     message: {
       hello: 'hello world',
     },
@@ -31,12 +44,25 @@ const locales = {
     language: {
       en: 'Αγγλικά',
       el: 'Ελληνικά',
-      switchLang: 'Αλλαγή Γλώσσας',
     },
     navigation: {
       search: 'Αναζήτηση',
       advancedSearch: 'Σύνθετη Αναζήτηση',
+      toggleLanguage: 'Αλλαγή Γλώσσας',
+      home: 'Αρχική',
+      back: 'Πίσω',
     },
+    estate: {
+      category: {
+        description: {
+          apartment: 'Διαμέρισμα',
+          maisonete: 'Μαιζονέτα',
+          detached_house: 'Μονοκατοικία',
+          villa: 'Έπαυλη',
+        },
+      },
+    },
+    advancedOptions: 'Περισσότερες Επιλογές',
     message: {
       hello: 'Καλημέρα',
     },
@@ -55,6 +81,17 @@ router.map({
     },
     name: 'advanced-search',
   },
+  '/hello': {
+    component(resolve) {
+    require(['./components/hello'], resolve)  // eslint-disable-line
+    },
+    name: 'hello',
+  },
 });
 sync(store, router);
 router.start(App, '#app');
+
+// router.beforeEach((transition) => {
+//   console.log('transition', transition.from);
+//   transition.next();
+// });

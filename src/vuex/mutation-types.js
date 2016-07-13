@@ -1,2 +1,1 @@
-const CHANGELANGUAGE = 'CHANGELANGUAGE';
-export default CHANGELANGUAGE;
+export const CHANGELANGUAGE = 'CHANGELANGUAGE'; // eslint-disable-line

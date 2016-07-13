@@ -15,6 +15,18 @@ export default {
       msg: 'Hello World!',
     };
   },
+  router: {
+    activate({ next }) {
+      alert('active');
+      // when done:
+      next();
+    },
+    deactivate({ next }) {
+      console.log('inbox deactivated.');
+      // when done:
+      next();
+    },
+  },
 };
 </script>
 

@@ -1,14 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import mutations from './mutations';
+import language from './modules/language';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
-  state: {
-    language: 'el',
+  modules: {
+    language,
   },
-  mutations,
   strict: true,
 });
 // /* eslint-disable */

@@ -2,11 +2,17 @@
   <div>
     <nav class="actions">
       <mdl-tooltip for="actions-advanced">{{{ $t('navigation.advancedSearch') }}}</mdl-tooltip>
-      <mdl-button icon='true' v-link="{ path: 'advanced-search' }" id="actions-advanced"><i class="mdi mdi-google-circles-extended"></i></mdl-button>
-      <mdl-button icon='true'  @click="ch" ><i class="mdi mdi-translate"></i></i></mdl-button>
+      <mdl-button icon='true' v-link="{ name: 'advanced-search' }" id="actions-advanced"><i class="mdi mdi-google-circles-extended"></i></mdl-button>
+      <mdl-tooltip for="actions-toggleLanguage">{{{ $t('navigation.toggleLanguage') }}}</mdl-tooltip>
+      <mdl-button icon='true'  @click="toggleLanguage" id="actions-toggleLanguage"><i class="mdi mdi-translate"></i></i></mdl-button>
+      <mdl-tooltip for="actions-home">{{{ $t('navigation.home') }}}</mdl-tooltip>
+      <mdl-button icon='true'  @click="goToHome" id="actions-home"><i class="mdi mdi-home"></i></i></mdl-button>
+      <mdl-tooltip for="actions-back">{{{ $t('navigation.back') }}}</mdl-tooltip>
+      <mdl-button icon='true'   @click="goBack" id="actions-back"><i class="mdi mdi-undo-variant"></i></i></mdl-button>
       <!-- <a href="#" ><i class="mdi mdi-translate"></i></a> -->
     </nav>
-    <router-view></router-view>
+
+    <router-view keep-alive></router-view>
   </div>
 </template>
 <script>
@@ -23,7 +29,7 @@
     props: [],
     computed: {},
     methods: {
-      ch() {
+      toggleLanguage() {
         if (this.getLanguage === 'el') {
           Vue.config.lang = 'en';
           this.changeLanguage('en');
@@ -31,6 +37,12 @@
           Vue.config.lang = 'el';
           this.changeLanguage('el');
         }
+      },
+      goToHome() {
+        this.$router.go({ path: '/' });
+      },
+      goBack() {
+        this.$router.go({ path: '/advanced-search/amenities' });
       },
     },
     // watch: {},
