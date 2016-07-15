@@ -20,12 +20,12 @@ const locales = {
     },
     navigation: {
       search: 'Search',
-      advancedSearch: 'Advanced Search',
       toggleLanguage: 'Switch Language',
       home: 'Home',
       back: 'Go Back',
     },
     estate: {
+      type: 'Estate Type',
       category: {
         description: {
           apartment: 'Apartment',
@@ -34,8 +34,32 @@ const locales = {
           villa: 'Villa',
         },
       },
+      area: 'Estate area',
+      areaUnits: 'sq.m.',
+    },
+    listing: {
+      type: {
+        sale: 'Sale',
+        rent: 'Rent',
+      },
+      price: 'Estate Price',
+      range: {
+        from: 'from',
+        to: 'to',
+      },
+      searchSwitch: 'Search by Listing Id',
+      searchMsg: 'Listing Id',
+      error: 'Wrong Input!',
     },
     advancedOptions: 'Advanced Options',
+    btns: {
+      clear: 'Clear',
+      cancel: 'Cancel',
+      confirm: 'Ok',
+      search: 'Search',
+      yes: 'Yes',
+      no: 'No',
+    },
     message: {
       hello: 'hello world',
     },
@@ -47,12 +71,12 @@ const locales = {
     },
     navigation: {
       search: 'Αναζήτηση',
-      advancedSearch: 'Σύνθετη Αναζήτηση',
       toggleLanguage: 'Αλλαγή Γλώσσας',
       home: 'Αρχική',
       back: 'Πίσω',
     },
     estate: {
+      type: 'Τύπος Ιδιοκτησίας',
       category: {
         description: {
           apartment: 'Διαμέρισμα',
@@ -61,8 +85,32 @@ const locales = {
           villa: 'Έπαυλη',
         },
       },
+      area: 'Εμβαδό ακινήτου',
+      areaUnits: 'τ.μ.',
+    },
+    listing: {
+      type: {
+        sale: 'Πώληση',
+        rent: 'Ενοικίαση',
+      },
+      price: 'Τιμή Ακινήτου',
+      range: {
+        from: 'από',
+        to: 'εώς',
+      },
+      searchSwitch: 'Αναζήτηση με Κωδικό Αγγελίας',
+      searchMsg: 'Κωδικός Αγγελίας',
+      error: 'Λάθος Τιμή!',
     },
     advancedOptions: 'Περισσότερες Επιλογές',
+    btns: {
+      clear: 'Καθαρισμος',
+      cancel: 'Ακυρωση',
+      confirm: 'Ok',
+      search: 'Αναζητηση',
+      yes: 'Ναι',
+      no: 'Οχι',
+    },
     message: {
       hello: 'Καλημέρα',
     },
@@ -75,17 +123,17 @@ Object.keys(locales).forEach((lang) => {
   Vue.locale(lang, locales[lang]);
 });
 router.map({
-  '/advanced-search': {
+  '/search': {
+    name: 'search',
     component(resolve) {
-      require(['./components/advanced-search'], resolve) // eslint-disable-line
+      require(['./components/search'], resolve) // eslint-disable-line
     },
-    name: 'advanced-search',
   },
   '/hello': {
+    name: 'hello',
     component(resolve) {
     require(['./components/hello'], resolve)  // eslint-disable-line
     },
-    name: 'hello',
   },
 });
 sync(store, router);

@@ -8,6 +8,10 @@ module.exports = {
   plugins: [
     'html'
   ],
+  "env": {
+        "browser": true,
+        "node": true
+  },
   // add your custom rules here
   'rules': {
     'import/no-unresolved': 0,

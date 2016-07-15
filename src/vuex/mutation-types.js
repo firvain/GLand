@@ -1,1 +1,2 @@
-export const CHANGELANGUAGE = 'CHANGELANGUAGE'; // eslint-disable-line
+export const CHANGELANGUAGE = 'CHANGELANGUAGE';
+export const SEARCH = 'SEARCH';

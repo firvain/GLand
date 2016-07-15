@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import language from './modules/language';
+import search from './modules/search';
 
 Vue.use(Vuex);
 
 const store = new Vuex.Store({
   modules: {
     language,
+    search,
   },
   strict: true,
 });

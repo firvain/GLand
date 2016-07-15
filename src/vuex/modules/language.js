@@ -8,8 +8,8 @@ const state = {
 
 // mutations
 const mutations = {
-  [CHANGELANGUAGE](state, language) { // eslint-disable-line
-      state.active = language;  // eslint-disable-line
+  [CHANGELANGUAGE](state, search) { // eslint-disable-line
+      state.active = search;  // eslint-disable-line
   },
 };
 

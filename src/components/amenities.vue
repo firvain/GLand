@@ -1,6 +1,10 @@
 <template lang="html">
-  <div class="mdl-cell mdl-cell--6-col">
-    <mdl-checkbox  v-for="amenity in amenities" :checked.sync="checks" :id="'search-form__maenities'+amenity" :value="amenity" class="mdl-js-ripple-effect"> {{ amenity }} </mdl-checkbox>
+  <div class="mdl-grid" v-show='showAmenities'>
+    <fieldset class="search-form__amenities">
+      <div class="mdl-cell mdl-cell--6-col">
+        <mdl-checkbox  v-for="amenity of amenities" :checked.sync="amenitiesChecks" :id="'search-form__maenities-' + amenity.value" :value="amenity.value" class="mdl-js-ripple-effect"> {{ amenity.name }} </mdl-checkbox>
+      </div>
+    </fieldset>
   </div>
 </template>
 <script>
@@ -9,17 +13,68 @@
     // Options / Data
     data() {
       return {
-        checks: [],
-        amenities: [],
+        // checks: [],
       };
     },
-    props: [],
+    props: {
+      showAmenities: {
+        default: false,
+      },
+      amenitiesChecks: {
+        type: Array,
+        default() {
+          return [];
+        },
+      },
+    },
     computed: {
       amenities() {
         if (this.getLanguage === 'el') {
-          return ['Χώρος Στάθμεσης', 'Επιπλωμένο', 'Θέρμανση', 'Κλιματισμός', 'Θέα'];
+          return [
+            {
+              name: 'Χώρος Στάθμεσης',
+              value: 'parking',
+            },
+            {
+              name: 'Επιπλωμένο',
+              value: 'furnished',
+            },
+            {
+              name: 'Θέρμανση',
+              value: 'heating',
+            },
+            {
+              name: 'Κλιματισμός',
+              value: 'air_condition',
+            },
+            {
+              name: 'Θέα',
+              value: 'has_view',
+            },
+          ];
         }
-        return ['Parking', 'Furnished', 'Heating', 'Air Condition', 'View'];
+        return [
+          {
+            name: 'Parking',
+            value: 'parking',
+          },
+          {
+            name: 'Furnished',
+            value: 'furnished',
+          },
+          {
+            name: 'Heating',
+            value: 'heating',
+          },
+          {
+            name: 'Air Condition',
+            value: 'air_condition',
+          },
+          {
+            name: 'view',
+            value: 'has_view',
+          },
+        ];
       },
     },
     methods: {},
