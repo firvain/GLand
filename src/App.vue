@@ -5,6 +5,7 @@
       <map class="right"></map>
     </div>
     <loader :active='showLoader' ></loader>
+    <mdl-snackbar display-on="A"></mdl-snackbar>
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import loader from './components/Loader';
 import map from './components/map';
 import sidebar from './components/sidebar';
 import store from './vuex/store';
+import { getSnackbarMsg } from './vuex/getters';
 export default {
   name: 'app',
   store,
@@ -30,10 +32,34 @@ export default {
   },
   ready() {
     this.removeLoader();
+    // this.$watch('msg', () => {
+    //   this.$broadcast('A', { message: this.getSnackbarMsg });
+    // });
+    this.$on('test', (testval) => {
+      console.log('testval', testval);
+    });
+    this.$emit('test', this.getSnackbarMsg);
+  },
+  computed: {
+    msg() {
+      // this.$broadcast('A', { message: this.getSnackbarMsg });
+      return this.getSnackbarMsg;
+    },
   },
   methods: {
     removeLoader() {
       this.showLoader = false;
+    },
+  },
+  watch: {
+    msg() {
+      this.$emit('test', this.getSnackbarMsg);
+    },
+    immediate: true,
+  },
+  vuex: {
+    getters: {
+      getSnackbarMsg,
     },
   },
 };

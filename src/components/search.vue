@@ -81,10 +81,11 @@
 </template>
 <script>
   import $ from '../javascripts/helpers';
+  import { isEmpty } from 'lodash';
   import Vue from 'vue';
-  import { getLanguage, getSearchType } from '../vuex/getters';
   import amenities from './amenities';
-  import { setSearchType } from '../vuex/actions';
+  import { setSearchType, setCurrentRoute, setPreviousRoute } from '../vuex/actions';
+  import { getLanguage, getSearchType, getCurrentRoute, getPreviousRoute } from '../vuex/getters';
   export default {
     name: 'search',
     // Options / Data
@@ -224,13 +225,28 @@
     },
     ready() {
     },
+    route: {
+      activate(transition) {
+        return new Promise((resolve) => {
+          this.setCurrentRoute(transition.to.path);
+          if (!isEmpty(transition.from)) {
+            this.setPreviousRoute(transition.from.path);
+          }
+          resolve();
+        });
+      },
+    },
     vuex: {
       getters: {
         getLanguage,
         getSearchType,
+        getCurrentRoute,
+        getPreviousRoute,
       },
       actions: {
         setSearchType,
+        setCurrentRoute,
+        setPreviousRoute,
       },
     },
   };

@@ -21,5 +21,34 @@ const helpers = {
   qsa(selector, context = document) {
     return context.querySelectorAll(selector);
   },
+  categoryToDesc(lang, id) {
+    const types = {
+      id2() {
+        if (lang === 'el') {
+          return 'Διαμέρισμα';
+        }
+        return 'Apartment';
+      },
+      id3() {
+        if (lang === 'el') {
+          return 'Μαιζονέτα';
+        }
+        return 'Maisonette';
+      },
+      id4() {
+        if (lang === 'el') {
+          return 'Μονοκατοικία';
+        }
+        return 'Detached House';
+      },
+      id5() {
+        if (lang === 'el') {
+          return 'Έπαυλη';
+        }
+        return 'Villa';
+      },
+    };
+    return types[id]();
+  },
 };
 export default helpers;

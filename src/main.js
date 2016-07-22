@@ -4,8 +4,12 @@ import VueRouter from 'vue-router';
 import VueMdl from 'vue-mdl';
 import VueI18n from 'vue-i18n';
 import { sync } from 'vuex-router-sync';
+import VueResource from 'vue-resource';
+import AsyncComputed from 'vue-async-computed';
 import store from './vuex/store';
 Vue.use(VueI18n);
+Vue.use(AsyncComputed);
+Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(VueMdl);
 const router = new VueRouter({
@@ -36,6 +40,7 @@ const locales = {
       },
       area: 'Estate area',
       areaUnits: 'sq.m.',
+      address: 'Address',
     },
     listing: {
       type: {
@@ -87,6 +92,7 @@ const locales = {
       },
       area: 'Εμβαδό ακινήτου',
       areaUnits: 'τ.μ.',
+      address: 'Διεύθυνση',
     },
     listing: {
       type: {
@@ -123,6 +129,12 @@ Object.keys(locales).forEach((lang) => {
   Vue.locale(lang, locales[lang]);
 });
 router.map({
+  '/': {
+    name: 'latest',
+    component(resolve) {
+      require(['./components/latest'], resolve) // eslint-disable-line
+    },
+  },
   '/search': {
     name: 'search',
     component(resolve) {
@@ -135,11 +147,21 @@ router.map({
     require(['./components/hello'], resolve)  // eslint-disable-line
     },
   },
+  '/card/:gid': {
+    name: 'card',
+    component(resolve) {
+    require(['./components/card'], resolve)  // eslint-disable-line
+    },
+  },
 });
+// router.redirect({
+//   '*': '/',
+// });
 sync(store, router);
 router.start(App, '#app');
-
+// window.router = router;
 // router.beforeEach((transition) => {
 //   console.log('transition', transition.from);
 //   transition.next();
 // });
+export default router;

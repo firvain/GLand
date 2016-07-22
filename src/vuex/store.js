@@ -2,6 +2,8 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import language from './modules/language';
 import search from './modules/search';
+import routing from './modules/routing';
+import snackbar from './modules/snackbar';
 
 Vue.use(Vuex);
 
@@ -9,6 +11,8 @@ const store = new Vuex.Store({
   modules: {
     language,
     search,
+    routing,
+    snackbar,
   },
   strict: true,
 });

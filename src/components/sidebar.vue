@@ -18,7 +18,7 @@
   import Vue from 'vue';
   import search from './search';
   import { changeLanguage } from '../vuex/actions';
-  import { getLanguage } from '../vuex/getters';
+  import { getLanguage, getPreviousRoute } from '../vuex/getters';
   export default {
     // Options / Data
     data() {
@@ -41,7 +41,7 @@
         this.$router.go({ path: '/' });
       },
       goBack() {
-        this.$router.go({ name: '/' });
+        this.$router.go({ path: this.getPreviousRoute });
       },
     },
     ready() {
@@ -49,10 +49,10 @@
     components: {
       search,
     },
-
     vuex: {
       getters: {
         getLanguage,
+        getPreviousRoute,
       },
       actions: {
         changeLanguage,
