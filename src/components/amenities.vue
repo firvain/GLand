@@ -1,80 +1,45 @@
 <template lang="html">
   <div class="mdl-grid" v-show='showAmenities'>
     <fieldset class="search-form__amenities">
-      <div class="mdl-cell mdl-cell--6-col">
-        <mdl-checkbox  v-for="amenity of amenities" :checked.sync="amenitiesChecks" :id="'search-form__maenities-' + amenity.value" :value="amenity.value" class="mdl-js-ripple-effect"> {{ amenity.name }} </mdl-checkbox>
+      <div class="mdl-cell mdl-cell--12-col">
+        <template v-for="(key, val) of amenities">
+            <mdl-checkbox :checked.sync="checks" :id="'search-form__amenities-' + key" :value="key" class="mdl-js-ripple-effect"> {{ $t(`estate.amenities.${key}`) }}</mdl-checkbox>
+        </template>
       </div>
     </fieldset>
   </div>
 </template>
 <script>
   import { getLanguage } from '../vuex/getters';
+
   export default {
     // Options / Data
     data() {
       return {
-        // checks: [],
       };
     },
     props: {
       showAmenities: {
         default: false,
       },
-      amenitiesChecks: {
-        type: Array,
+      amenities: {
+        type: Object,
         default() {
-          return [];
+          return {};
         },
       },
     },
     computed: {
-      amenities() {
-        if (this.getLanguage === 'el') {
-          return [
-            {
-              name: 'Χώρος Στάθμεσης',
-              value: 'parking',
-            },
-            {
-              name: 'Επιπλωμένο',
-              value: 'furnished',
-            },
-            {
-              name: 'Θέρμανση',
-              value: 'heating',
-            },
-            {
-              name: 'Κλιματισμός',
-              value: 'air_condition',
-            },
-            {
-              name: 'Θέα',
-              value: 'has_view',
-            },
-          ];
+      checks() {
+        const self = this;
+        const keys = Object.keys(this.amenities);
+        console.log('keys', keys);
+        function filterByKey(key) {
+          return self.amenities[key];
         }
-        return [
-          {
-            name: 'Parking',
-            value: 'parking',
-          },
-          {
-            name: 'Furnished',
-            value: 'furnished',
-          },
-          {
-            name: 'Heating',
-            value: 'heating',
-          },
-          {
-            name: 'Air Condition',
-            value: 'air_condition',
-          },
-          {
-            name: 'view',
-            value: 'has_view',
-          },
-        ];
+        const a = keys.filter(filterByKey);
+        console.log('keys', a);
+        return a;
       },
     },
     methods: {},

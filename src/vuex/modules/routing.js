@@ -1,6 +1,5 @@
 import { CURRENT_ROUTE, PREVIOUS_ROUTE } from '../mutation-types';
 
-
 // initial state
 const state = {
   current: '/',

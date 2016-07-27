@@ -19,6 +19,7 @@
   import search from './search';
   import { changeLanguage } from '../vuex/actions';
   import { getLanguage, getPreviousRoute } from '../vuex/getters';
+  
   export default {
     // Options / Data
     data() {

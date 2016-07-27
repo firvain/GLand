@@ -1,6 +1,5 @@
 import { CHANGELANGUAGE } from '../mutation-types';
 
-
 // initial state
 const state = {
   active: 'el',

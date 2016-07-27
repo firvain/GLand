@@ -7,6 +7,7 @@ import { sync } from 'vuex-router-sync';
 import VueResource from 'vue-resource';
 import AsyncComputed from 'vue-async-computed';
 import store from './vuex/store';
+
 Vue.use(VueI18n);
 Vue.use(AsyncComputed);
 Vue.use(VueResource);
@@ -41,6 +42,32 @@ const locales = {
       area: 'Estate area',
       areaUnits: 'sq.m.',
       address: 'Address',
+      amenities: {
+        solar_water_heating: 'Solar Water System',
+        heating_system: 'Heating System',
+        fireplace: 'Fireplace',
+        awning: 'Awning',
+        alarm: 'Alarm',
+        furnished: 'Furnished',
+        has_storage: 'Storage',
+        elevator: 'Elevator',
+        balcony: 'Balcony',
+        corner: 'Corner',
+        airy: 'Airy',
+        double_glass: 'Double Glass',
+        attic: 'Attic',
+        has_view: 'View',
+        garden: 'Garden',
+        air_condition: 'Air Condition',
+        penthouse: 'Penthhouse',
+        night_power: 'Night Power',
+        parking: 'Parking',
+        playroom: 'Playroom',
+        pool: 'Pool',
+        satellite: 'Sattelite',
+        secure_door: 'Secure Door',
+        shared_expenses: 'Shared Expenses',
+      },
     },
     listing: {
       type: {
@@ -67,6 +94,7 @@ const locales = {
     },
     message: {
       hello: 'hello world',
+      atRoad: 'at road',
     },
   },
   el: {
@@ -93,6 +121,32 @@ const locales = {
       area: 'Εμβαδό ακινήτου',
       areaUnits: 'τ.μ.',
       address: 'Διεύθυνση',
+      amenities: {
+        solar_water_heating: 'Ηλιακός',
+        heating_system: 'Θέρμανση',
+        fireplace: 'Τζάκι',
+        awning: 'Τέντα',
+        alarm: 'Συναγερμός',
+        furnished: 'Επιπλωμένο',
+        has_storage: 'Αποθήκη',
+        elevator: 'Ανελκυστήρας',
+        balcony: 'Balcony',
+        corner: 'Μπαλκόνι',
+        airy: 'Ευάερο',
+        double_glass: 'Διπλά Τζάμια',
+        attic: 'Σοφίτα',
+        has_view: 'Θέα',
+        garden: 'Κήπος',
+        air_condition: 'Κλιματισμός',
+        penthouse: 'Ρετιρέ',
+        night_power: 'Νυχτερινό Ρέυμα',
+        parking: 'Χώρος Στάθμευσης',
+        playroom: 'Δωμάτιο Παιχνιδιού',
+        pool: 'Πισίνα',
+        satellite: 'Δορυφορική',
+        secure_door: 'Πόρτα ασφαλείας',
+        shared_expenses: 'Κοινόχρηστα Έξοδα',
+      },
     },
     listing: {
       type: {
@@ -119,6 +173,7 @@ const locales = {
     },
     message: {
       hello: 'Καλημέρα',
+      atRoad: 'στην οδό',
     },
   },
 };

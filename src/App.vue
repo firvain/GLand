@@ -17,6 +17,7 @@ import map from './components/map';
 import sidebar from './components/sidebar';
 import store from './vuex/store';
 import { getSnackbarMsg } from './vuex/getters';
+
 export default {
   name: 'app',
   store,

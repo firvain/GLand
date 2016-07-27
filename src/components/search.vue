@@ -86,6 +86,7 @@
   import amenities from './amenities';
   import { setSearchType, setCurrentRoute, setPreviousRoute } from '../vuex/actions';
   import { getLanguage, getSearchType, getCurrentRoute, getPreviousRoute } from '../vuex/getters';
+  
   export default {
     name: 'search',
     // Options / Data

@@ -1,19 +1,25 @@
 <template lang="html">
   <div class="card-wrapper">
     <h2 class="title">
-    {{ properties.description }} στην οδό  {{ properties.address.street_name }}
+    {{ properties.description }} {{ $t('message.atRoad') }}  {{ properties.address.street_name }}
     </h2>
     <mdl-card class="info-card" title=' '>
     </mdl-card>
+    <h2 class="listingType" v-show='properties.listing.sale'>
+      {{ $t('listing.type.sale') }}
+    </h2>
+    <h2 class="listingType" v-show='!properties.listing.sale'>
+      {{ $t('listing.type.rent') }}
+    </h2>
     <h3 class="address">
       {{ $t('estate.address') }}
     </h3>
     <p>
-      <!-- {{ address }} -->
+      {{ properties.address.street_name }} {{ properties.address.street_number }}, {{ properties.address.ps_code }}, {{ properties.address.city }}
     </p>
     <div class="mdl-grid amenities">
       <div class="mdl-cell mdl-cell--12-col">
-        <amenities :show-amenities='showAmenities' :amenities-checks='amenitiesChecks'></amenities>
+        <amenities :show-amenities='showAmenities' :amenities='properties.amenities'></amenities>
       </div>
     </div>
   </div>
@@ -21,15 +27,42 @@
 <script >
   import $ from '../javascripts/helpers';
   import { isEmpty, cloneDeep, set } from 'lodash';
-  import { setCurrentRoute, setPreviousRoute } from '../vuex/actions';
+  import { setCurrentRoute, setPreviousRoute, setClickedEstate } from '../vuex/actions';
   import { getLanguage } from '../vuex/getters';
   import amenities from './amenities';
+
   export default {
     // Options / Data
     data() {
       return {
         showAmenities: true,
-        amenitiesChecks: [],
+        amenities: [
+          {
+            name: 'Χώρος Στάθμεσης',
+            value: 'parking',
+            show: false,
+          },
+          {
+            name: 'Επιπλωμένο',
+            value: 'furnished',
+            show: true,
+          },
+          {
+            name: 'Θέρμανση',
+            value: 'heating_system',
+            show: true,
+          },
+          {
+            name: 'Κλιματισμός',
+            value: 'air_condition',
+            show: true,
+          },
+          {
+            name: 'Θέα',
+            value: 'has_view',
+            show: true,
+          },
+        ],
         properties: {
           ameniies: {},
           address: {},
@@ -63,11 +96,16 @@
           const obj = cloneDeep(response.data.features[0].properties);
           const categoryId = response.data.features[0].properties.category_id;
           const description = $.categoryToDesc(this.getLanguage, `id${categoryId}`);
-          console.log('description', description);
           set(obj, 'description', description);
-          console.log('obj', obj);
+          this.setClickedEstate(obj);
           return obj;
         });
+      },
+    },
+    watch: {
+      getLanguage: function a() {
+        console.log(this.getLanguage);
+        return this.getLanguage;
       },
     },
     route: {
@@ -95,6 +133,7 @@
       actions: {
         setCurrentRoute,
         setPreviousRoute,
+        setClickedEstate,
       },
     },
     name: 'card',
@@ -140,9 +179,19 @@
     margin-top: 0.2em;
     margin-bottom: 0.2em;
     padding: .2em;
+    border-radius: .2em;
   }
-  .amenitites {
-
+  .listingType {
+    background-color: rgb(255, 82, 82);
+    color: #fff;
+    font-size: 1.2em;
+    line-height: normal;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    padding: .2em;
+    text-align: right;
+    border-radius: .2em;
+    letter-spacing: .1em;
   }
 }
 </style>

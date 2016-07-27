@@ -1,4 +1,5 @@
-import { CHANGELANGUAGE, SEARCH, PREVIOUS_ROUTE, CURRENT_ROUTE, SNACKBAR } from './mutation-types';
+import { CHANGELANGUAGE, SEARCH, PREVIOUS_ROUTE, CURRENT_ROUTE,
+   SNACKBAR, SETCLICKEDESTATE } from './mutation-types';
 
 export const changeLanguage = ({ dispatch }, active) => {
   dispatch(CHANGELANGUAGE, active);
@@ -14,4 +15,8 @@ export const setCurrentRoute = ({ dispatch }, current) => {
 };
 export const setSnackbarMsg = ({ dispatch }, msg) => {
   dispatch(SNACKBAR, msg);
+};
+
+export const setClickedEstate = ({ dispatch }, clickedEstate) => {
+  dispatch(SETCLICKEDESTATE, clickedEstate);
 };

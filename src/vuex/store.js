@@ -4,6 +4,7 @@ import language from './modules/language';
 import search from './modules/search';
 import routing from './modules/routing';
 import snackbar from './modules/snackbar';
+import estate from './modules/estate';
 
 Vue.use(Vuex);
 
@@ -13,6 +14,7 @@ const store = new Vuex.Store({
     search,
     routing,
     snackbar,
+    estate,
   },
   strict: true,
 });

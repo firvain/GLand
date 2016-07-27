@@ -1,6 +1,5 @@
 import { SEARCH } from '../mutation-types';
 
-
 // initial state
 const state = {
   full: true,

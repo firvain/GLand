@@ -3,3 +3,4 @@ export const SEARCH = 'SEARCH';
 export const CURRENT_ROUTE = 'CURRENT_ROUTE';
 export const PREVIOUS_ROUTE = 'PREVIOUS_ROUTE';
 export const SNACKBAR = 'SNACKBAR';
+export const SETCLICKEDESTATE = 'SETCLICKEDESTATE';
