@@ -3,12 +3,11 @@
     <div class="mdl-grid search-toggle">
       <div class="mdl-cell mdl-cell--6-col">
         <mdl-switch v-ref:search-id-switch :checked.sync="searchTypeCheck" value="one">{{ $t('listing.searchSwitch') }}</mdl-switch>
-      </div>
-    </div>
-    <div class="mdl-grid search-id" v-show="isCheckByid">
-      <div class="mdl-cell mdl-cell--12-col">
-        <mdl-textfield id="search-id" v-ref:search-id :floating-label="floating" :label=searchByIdLabel :value.sync="estateId" type="text" pattern="^[0-9]*[1-9]+[0-9]*$" :error=errormsg></mdl-textfield>
-      </div>
+        </div>
+        <div v-show="isCheckByid" class="mdl-cell mdl-cell--6-col">
+          <mdl-textfield id="search-id" v-ref:search-id :floating-label="floating" :label=searchByIdLabel :value.sync="estateId" type="text" pattern="^[0-9]*[1-9]+[0-9]*$" :error=errormsg></mdl-textfield>
+        </div>
+
     </div>
     <div class="mdl-grid search-id__buttons" v-show="isCheckByid">
       <div class="mdl-cell mdl-cell--6-col">
@@ -23,8 +22,8 @@
       <form class="search-form" action="#" method="post">
           <div class="mdl-grid search-form__listingType">
               <div class="mdl-cell mdl-cell--12-col">
-                <mdl-radio v-ref:rent :checked.sync="listingType" value="rent" class="mdl-js-ripple-effect" name="search-form__listingType-options">{{ $t('listing.type.rent') }}</mdl-radio>
-                <mdl-radio v-ref:sale :checked.sync="listingType" value="sale" class="mdl-js-ripple-effect" name="search-form__listingType-options">{{ $t('listing.type.sale') }}</mdl-radio>
+                <mdl-radio v-ref:rent :checked.sync="listingType" value='rent' class="mdl-js-ripple-effect" name="search-form__listingType-options">{{ $t('listing.type.rent') }}</mdl-radio>
+                <mdl-radio v-ref:sale :checked.sync="listingType" value='sale' class="mdl-js-ripple-effect" name="search-form__listingType-options">{{ $t('listing.type.sale') }}</mdl-radio>
               </div>
           </div>
           <div class="mdl-grid search-form__estateType">
@@ -65,7 +64,7 @@
               <a v-link="'search'" @click.stop='toggleAmenities'>{{ $t('advancedOptions') }}</a>
             </div>
           </div>
-          <amenities :show-amenities='showAmenities' :amenities-checks='amenitiesChecks' v-ref:amenities></amenities>
+          <amenities :show-amenities='showAmenities' :amenities='amenitiesChecks' :search='true' :listing-type='listingType' v-ref:amenities></amenities>
           <div class="mdl-grid search-form__buttons">
             <div class="mdl-cell mdl-cell--6-col">
               <mdl-button @click.stop.prevent="clearForm">{{ $t('btns.clear') }}</mdl-button>
@@ -81,12 +80,13 @@
 </template>
 <script>
   import $ from '../javascripts/helpers';
-  import { isEmpty } from 'lodash';
+  import _ from 'lodash';
   import Vue from 'vue';
   import amenities from './amenities';
   import { setSearchType, setCurrentRoute, setPreviousRoute } from '../vuex/actions';
   import { getLanguage, getSearchType, getCurrentRoute, getPreviousRoute } from '../vuex/getters';
-  
+  import map from '../javascripts/map.js';
+
   export default {
     name: 'search',
     // Options / Data
@@ -94,13 +94,12 @@
       return {
         items: ['2', '3', '4', '5'],
         showAmenities: true,
-        listingType: ['rent'],
+        listingType: 'rent',
         startPrice: '',
         endPrice: '',
         startArea: '',
         endArea: '',
         floating: true,
-        amenitiesChecks: [],
         estateId: '',
         searchTypeCheck: [],
       };
@@ -149,6 +148,23 @@
         this.setSearchType(!showFilters);
         return showFilters;
       },
+      amenitiesChecks() {
+        if (this.listingType === 'rent') {
+          return {
+            furnished: false,
+            heating_system: false,
+            air_condition: false,
+            has_view: false,
+            parking: false,
+          };
+        }
+        return {
+          heating_system: false,
+          air_condition: false,
+          has_view: false,
+          parking: false,
+        };
+      },
     },
     methods: {
       getCheckedAmenities(event) { // eslint-disable-line
@@ -178,6 +194,10 @@
         for (const input of inputs) {
           $.rc('is-invalid', input);
         }
+        const results = $.findById.call(map, 'results');
+        const estates = $.findById.call(map, 'estates');
+        results.setVisible(false);
+        estates.setVisible(true);
       },
       assignCategories(name) {
         const types = {
@@ -207,21 +227,61 @@
         return types[name];
       },
       getValues() {
+        const results = $.findById.call(map, 'results');
+        const estates = $.findById.call(map, 'estates');
+        const geoJSONFormat = results.getSource().getSource().getFormat();
         const values = {};
         values.category_id = this.assignCategories(this.$refs.estateType.value)();
-        values.price_start = this.$refs.priceStart.value;
-        values.price_end = this.$refs.priceEnd.value;
-        values.area_start = this.$refs.areaStart.value;
-        values.area_end = this.$refs.areaEnd.value;
+        values.price_start = parseInt(this.$refs.priceStart.value, 10);
+        values.price_end = parseInt(this.$refs.priceEnd.value, 10);
+        values.area_start = parseInt(this.$refs.areaStart.value, 10);
+        values.area_end = parseInt(this.$refs.areaEnd.value, 10);
         values.amenities = this.getCheckedAmenities();
-        console.log('values', values);
+        let data = {};
+        data = _(values).omitBy(_.isNil).omitBy(_.isEmpty)
+          .value();
+        this.$http.get('http://127.0.0.1:3000/v1/listed/search', {
+          params: {
+            sale: data.sale,
+            categoryId: data.category_id,
+          },
+        })
+          .then(response => {
+            const features = geoJSONFormat.readFeatures(response.data, {
+              featureProjection: 'EPSG:3857',
+            });
+            results.getSource().getSource().clear();
+            results.getSource().getSource().addFeatures(features);
+          })
+          .catch((err) => {
+            if (err.status === 0) {
+              console.log('sercice Anavailable');
+            } else {
+              console.log('err', err.statusText);
+            }
+          });
+        // console.log('values', values);
+
+        // _(data.amenities).omitBy((v, k) => {
+        //   console.log('v', v);
+        //   console.log('k', k);
+        //   if (!v) {
+        //     return true;
+        //   }
+        //   return false;
+        // }).value();
+        // console.log('data', data);
+
+        results.setVisible(true);
+        estates.setVisible(false);
+        // console.log('title', results.getFeatures());
       },
       searchById() {
         console.log('title', this.$data.estateId);
       },
       clearSearchById() {
         this.$data.estateId = '';
-        $.rc('is-invalid', document.querySelector('.search-id .mdl-textfield'));
+        $.rc('is-invalid', document.querySelector('.search-toggle .mdl-textfield'));
       },
     },
     ready() {
@@ -230,7 +290,7 @@
       activate(transition) {
         return new Promise((resolve) => {
           this.setCurrentRoute(transition.to.path);
-          if (!isEmpty(transition.from)) {
+          if (!_.isEmpty(transition.from)) {
             this.setPreviousRoute(transition.from.path);
           }
           resolve();
@@ -256,7 +316,9 @@
 .search-toggle {
   justify-content: center;
   align-items: center;
-
+  .mdl-switch__label{
+    font-size: 0.8em;
+  }
 }
 .search-id {
   justify-content: center;

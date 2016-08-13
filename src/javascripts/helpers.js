@@ -50,5 +50,27 @@ const helpers = {
     };
     return types[id]();
   },
+  findById(id) {
+    const layers = this.getLayers();
+    const length = layers.getLength();
+    // console.log('layers', layers);
+    for (let i = 0; i < length; i++) {
+      if (id === layers.item(i).get('id')) {
+        return layers.item(i);
+      }
+    }
+    return null;
+  },
+  findByName(name) {
+    const layers = this.getLayers();
+    const length = layers.getLength();
+    // console.log('layers', layers);
+    for (let i = 0; i < length; i++) {
+      if (name === layers.item(i).get('name')) {
+        return layers.item(i);
+      }
+    }
+    return null;
+  },
 };
 export default helpers;

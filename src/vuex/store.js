@@ -5,6 +5,7 @@ import search from './modules/search';
 import routing from './modules/routing';
 import snackbar from './modules/snackbar';
 import estate from './modules/estate';
+import cart from './modules/cart';
 
 Vue.use(Vuex);
 
@@ -15,6 +16,7 @@ const store = new Vuex.Store({
     routing,
     snackbar,
     estate,
+    cart,
   },
   strict: true,
 });

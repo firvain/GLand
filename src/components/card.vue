@@ -1,32 +1,65 @@
 <template lang="html">
-  <div class="card-wrapper">
+<div class="card-wrapper">
+  <div v-if="$loadingRouteData">Loading data...</div>
+  <div v-if="!$loadingRouteData" >
     <h2 class="title">
-    {{ properties.description }} {{ $t('message.atRoad') }}  {{ properties.address.street_name }}
+    {{ $t(`estate.category.id.id${properties.category_id}`) }} {{ $t('message.atRoad') }}  {{ properties.address.street_name }}
     </h2>
-    <mdl-card class="info-card" title=' '>
-    </mdl-card>
+    <!-- <mdl-card class="info-card" title=' ' :media='media'>
+    </mdl-card> -->
+    <div class="mdl-grid ">
+      <div class="mdl-cell mdl-cell--12-col info-card">
+        <img :src='media' alt="test" class=" mdl-shadow--2dp"/>
+      </div>
+    </div>
     <h2 class="listingType" v-show='properties.listing.sale'>
       {{ $t('listing.type.sale') }}
     </h2>
     <h2 class="listingType" v-show='!properties.listing.sale'>
       {{ $t('listing.type.rent') }}
     </h2>
-    <h3 class="address">
-      {{ $t('estate.address') }}
-    </h3>
-    <p>
-      {{ properties.address.street_name }} {{ properties.address.street_number }}, {{ properties.address.ps_code }}, {{ properties.address.city }}
-    </p>
-    <div class="mdl-grid amenities">
+
+    <div v-show='!contactInfo' :transition="transitions.fade.id" class="mdl-grid address-details">
+      <div class="mdl-cell mdl-cell--12-col">
+        <h3 class="address">
+          {{ $t('estate.address') }}
+        </h3>
+        <p>
+          {{ properties.address.street_name }} {{ properties.address.street_number }}
+        </p>
+        <p>
+          {{ properties.address.ps_code }}, {{ properties.address.city }}
+        </p>
+      </div>
+    </div>
+    <div v-show='!contactInfo' :transition="transitions.fade.id" class="mdl-grid amenities">
       <div class="mdl-cell mdl-cell--12-col">
         <amenities :show-amenities='showAmenities' :amenities='properties.amenities'></amenities>
       </div>
     </div>
+    <mdl-button raised colored @click.stop="showContactInfo">{{ $t('message.contactInfo') }}</mdl-button>
+    <div v-show='contactInfo' class="mdl-grid address-details">
+      <div class="mdl-cell mdl-cell--12-col info-card">
+        <p>
+          <strong>{{ properties.user.first_name }} {{ properties.user.last_name }}</strong>, {{ properties.user.street_name }} {{ properties.user.street_number }}, {{ properties.user.city }}, {{ properties.user.country }}
+        </p>
+        <p>
+          {{ $t('user.phone') }}: <strong>{{ properties.user.phone}}</strong>
+        </p>
+        <p>
+           Fax: {{ properties.user.fax}}
+        </p>
+        <p>
+          E-mail: <strong>{{ properties.user.email}}</strong>
+        </p>
+    </div>
   </div>
+  </div>
+</div>
 </template>
 <script >
-  import $ from '../javascripts/helpers';
-  import { isEmpty, cloneDeep, set } from 'lodash';
+  // import $ from '../javascripts/helpers';
+  import { isEmpty } from 'lodash';
   import { setCurrentRoute, setPreviousRoute, setClickedEstate } from '../vuex/actions';
   import { getLanguage } from '../vuex/getters';
   import amenities from './amenities';
@@ -36,6 +69,7 @@
     data() {
       return {
         showAmenities: true,
+        contactInfo: false,
         amenities: [
           {
             name: 'Χώρος Στάθμεσης',
@@ -67,15 +101,22 @@
           ameniies: {},
           address: {},
           listing: {},
+          user: {},
+        },
+        transitions: {
+          fade: {
+            id: 'fade',
+            // hooks: {
+            //   beforeEnter: function(el) { // eslint-disable-line
+            //     console.log('beforeEnter');
+            //   },
+            // },
+          },
         },
         media: 'https://res.cloudinary.com/firvain/image/upload/v1467659504/1091/dfovlwox0w1si4ggb0sv.jpg',
       };
     },
     ready() {
-      this.$el.querySelector('.mdl-card__title').style.background =
-      `url(' ${this.$data.media}') center / cover`;
-      // const a = $.categoryToDesc(this.getLanguage, this.properties.category_id);
-      // console.log('res', getEstate(this.$route.params.gid));
     },
     props: [],
     components: {
@@ -92,14 +133,14 @@
     methods: {
       getEtsateProperties(gid) {
         return this.$http.get(`http://127.0.0.1:3000/v1/listed/${gid}`)
-        .then(response => {
-          const obj = cloneDeep(response.data.features[0].properties);
-          const categoryId = response.data.features[0].properties.category_id;
-          const description = $.categoryToDesc(this.getLanguage, `id${categoryId}`);
-          set(obj, 'description', description);
-          this.setClickedEstate(obj);
-          return obj;
-        });
+          .then(response => response.data.features[0].properties);
+      },
+      showContactInfo() {
+        if (this.$data.contactInfo) {
+          this.$data.contactInfo = false;
+        } else {
+          this.$data.contactInfo = true;
+        }
       },
     },
     watch: {
@@ -109,7 +150,7 @@
       },
     },
     route: {
-      waitForData: true,
+      waitForData: false,
       data({ to: { params: { gid } } }) { // eslint-disable-line
         // console.log('$route.params',);
         return {
@@ -143,23 +184,11 @@
 .card-wrapper {
   margin: 1em;
 }
-.info-card.mdl-card {
-  width: 100%;
-}
-.info-card .mdl-card__title,
-.info-card .mdl-card__menu {
-  color: white;
-}
-.info-card .mdl-card__title {
-  height: 20em;
-  justify-content: center;
-}
-.info-card .mdl-card__title-text {
-  background-color: rgba(255, 82, 82, .5);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%
+.info-card {
+  img {
+    width: 100%;
+    height: auto;
+  }
 }
 .card-wrapper {
   .title {
@@ -170,6 +199,8 @@
     margin-top: 0;
     margin-bottom: 0.2em;
     padding: .2em;
+    border-radius: .2em;
+    text-align: center;
   }
   .address {
     background-color: rgb(96, 125, 139);
@@ -192,6 +223,21 @@
     text-align: right;
     border-radius: .2em;
     letter-spacing: .1em;
+  }
+  .address-details{
+    p {
+      margin: 0;
+    }
+  }
+  .fade-transition {
+    overflow: hidden;
+    visibility: visible;
+    opacity: 1;
+  }
+  .fade-enter, .fade-leave {
+    transition: all 0.2s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
   }
 }
 </style>

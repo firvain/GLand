@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import ol from 'openlayers';
 
 const center = [3677385, 4120949];
@@ -23,7 +24,22 @@ const mapLayers = () => {
       distance: 40,
       source: new ol.source.Vector({
         format: geoJSONFormat,
-        url: 'http://127.0.0.1:3000/v1/listings',
+        loader() {
+          Vue.http.get('http://127.0.0.1:3000/v1/listed')
+            .then(response => {
+              const features = geoJSONFormat.readFeatures(response.data, {
+                featureProjection: 'EPSG:3857',
+              });
+              this.addFeatures(features);
+            })
+            .catch((err) => {
+              if (err.status === 0) {
+                console.log('sercice Anavailable');
+              } else {
+                console.log('err', err.statusText);
+              }
+            });
+        },
       }),
       attributions: [new ol.Attribution({
         html: 'All maps © <a href="http://www.terracognita.gr/">Terra Cognita</a>',
@@ -43,34 +59,82 @@ const mapLayers = () => {
         radius = 10;
         width = 2;
       }
-      if (!style) {
-        style = [new ol.style.Style({
-          image: new ol.style.Circle({
-            radius,
-            stroke: new ol.style.Stroke({
-              color: [255, 82, 82, 1],
-              width,
-            }),
-            fill: new ol.style.Fill({
-              color: [96, 125, 139, 0.8],
-            }),
+      style = [new ol.style.Style({
+        image: new ol.style.Circle({
+          radius,
+          stroke: new ol.style.Stroke({
+            color: [255, 82, 82, 1],
+            width,
           }),
-          text: new ol.style.Text({
-            text: size.toString(),
-            fill: new ol.style.Fill({
-              color: '#FFFFFF',
-            }),
+          fill: new ol.style.Fill({
+            color: [96, 125, 139, 0.8],
           }),
-          zIndex: 101,
-        })];
-        styleCache[size] = style;
-      }
+        }),
+        text: new ol.style.Text({
+          text: size.toString(),
+          fill: new ol.style.Fill({
+            color: '#FFFFFF',
+          }),
+        }),
+        zIndex: 101,
+      })];
+      styleCache[size] = style;
       return style;
     },
     zIndex: 2,
     name: 'estates',
   });
   layers.push(estates);
+  const results = new ol.layer.Vector({
+    source: new ol.source.Cluster({
+      distance: 40,
+      source: new ol.source.Vector({
+        format: geoJSONFormat,
+      }),
+      attributions: [new ol.Attribution({
+        html: 'All maps © <a href="http://www.terracognita.gr/">Terra Cognita</a>',
+      })],
+    }),
+    id: 'results',
+    visible: false,
+    style: (feature) => {
+      const size = feature.get('features').length;
+      let style = styleCache[size];
+      let radius;
+      let width;
+      if (size > 1) {
+        radius = 15;
+        width = 2;
+      } else {
+        radius = 10;
+        width = 2;
+      }
+      style = [new ol.style.Style({
+        image: new ol.style.Circle({
+          radius,
+          stroke: new ol.style.Stroke({
+            color: [96, 125, 139, 1],
+            width,
+          }),
+          fill: new ol.style.Fill({
+            color: [255, 82, 82, 1],
+          }),
+        }),
+        text: new ol.style.Text({
+          text: size.toString(),
+          fill: new ol.style.Fill({
+            color: '#FFFFFF',
+          }),
+        }),
+        zIndex: 101,
+      })];
+      styleCache[size] = style;
+      return style;
+    },
+    zIndex: 3,
+    name: 'results',
+  });
+  layers.push(results);
   return layers;
 };
 const map = new ol.Map({

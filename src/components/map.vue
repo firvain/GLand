@@ -2,7 +2,7 @@
 <div id="map" class="map"></div>
 </template>
 <script>
-  import { setSnackbarMsg } from '../vuex/actions';
+  import { setSnackbarMsg, addToCart } from '../vuex/actions';
   import map from '../javascripts/map.js';
 
   export default {
@@ -23,7 +23,7 @@
             layer,
           }
         ), map, (layer) => {
-          if (layer.get('id') === 'estates' || layer.get('id') === 'filteredEstates') {
+          if (layer.get('id') === 'estates' || layer.get('id') === 'results') {
             return true;
           }
           return false;
@@ -32,13 +32,21 @@
           const length = clickedFeature.feature.getProperties().features.length;
           if (length === 1) {
             const gid = clickedFeature.feature.getProperties().features[0]
-            .getProperties().gid;
+              .getProperties().gid;
             const coords = clickedFeature.feature.getProperties().features[0]
-            .getGeometry().getCoordinates();
+              .getGeometry().getCoordinates();
             this.getView().setCenter(coords);
             self.$router.go({ path: `/card/${gid}` });
           } else if (length > 1) {
-            self.$router.go({ path: '/card' });
+            const features = clickedFeature.feature.getProperties().features;
+            features.forEach((f) => {
+              const price = f.get('listing').price;
+              const gid = f.get('gid');
+              const amenities = f.get('amenities');
+              console.log('amenitites', amenities);
+              self.addToCart({ gid, price, amenities });
+            });
+            self.$router.go({ path: '/list' });
           }
         } else {
           self.setSnackbarMsg(`Found ${length} estates`);
@@ -48,6 +56,7 @@
     vuex: {
       actions: {
         setSnackbarMsg,
+        addToCart,
       },
     },
   };

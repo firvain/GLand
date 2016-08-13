@@ -1,13 +1,28 @@
 <template lang="html">
-  <div class="mdl-grid" v-show='showAmenities'>
+
     <fieldset class="search-form__amenities">
-      <div class="mdl-cell mdl-cell--12-col">
+
+        <div v-if="!search">
         <template v-for="(key, val) of amenities">
+          <div v-if="val">
+            <mdl-checkbox  :checked.sync="checks" :id="'search-form__amenities-' + key" :value="key" class="mdl-js-ripple-effect" disabled> {{ $t(`estate.amenities.${key}`) }}</mdl-checkbox>
+          </div>
+          <!-- <div v-else>
             <mdl-checkbox :checked.sync="checks" :id="'search-form__amenities-' + key" :value="key" class="mdl-js-ripple-effect"> {{ $t(`estate.amenities.${key}`) }}</mdl-checkbox>
+          </div> -->
         </template>
       </div>
+      <div v-else>
+        <template v-for="(key, val) of amenities">
+            <mdl-checkbox  :checked.sync="checks" :id="'search-form__amenities-' + key" :value="key" class="mdl-js-ripple-effect"> {{ $t(`estate.amenities.${key}`) }}</mdl-checkbox>
+          <!-- <div v-else>
+            <mdl-checkbox :checked.sync="checks" :id="'search-form__amenities-' + key" :value="key" class="mdl-js-ripple-effect"> {{ $t(`estate.amenities.${key}`) }}</mdl-checkbox>
+          </div> -->
+        </template>
+      </div>
+
     </fieldset>
-  </div>
+
 </template>
 <script>
   import { getLanguage } from '../vuex/getters';
@@ -20,6 +35,7 @@
     },
     props: {
       showAmenities: {
+        type: Boolean,
         default: false,
       },
       amenities: {
@@ -28,18 +44,25 @@
           return {};
         },
       },
+      search: {
+        type: Boolean,
+        default: false,
+      },
     },
     computed: {
       checks() {
         const self = this;
+        let checks;
         const keys = Object.keys(this.amenities);
-        console.log('keys', keys);
         function filterByKey(key) {
           return self.amenities[key];
         }
-        const a = keys.filter(filterByKey);
-        console.log('keys', a);
-        return a;
+        if (this.search) {
+          checks = [];
+        } else {
+          checks = keys.filter(filterByKey);
+        }
+        return checks;
       },
     },
     methods: {},
@@ -77,3 +100,13 @@
     // name: 'amenities',
   };
 </script>
+<style lang="scss">
+.mdl-checkbox  {
+  &.is-disabled {
+    .mdl-checkbox__label {
+      color: inherit;
+    }
+  }
+}
+
+</style>

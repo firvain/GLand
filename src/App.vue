@@ -94,8 +94,9 @@ body {
   box-sizing: inherit;
 }
 .app {
-  height: 100%;
   width: 100%;
+  height: 100%; /*Fallback*/
+  height: 100vh;
 
 }
 .flex-wrapper {
@@ -104,19 +105,39 @@ body {
   justify-content: space-around;
 }
 .full {
-  height: 100%;
-  // height: 100vh;
   width: 100%;
-  // width: 100vw;
+  height: 100%; /*Fallback*/
+  height: 100vh;
 }
 .left {
-  flex: 1 0 30%;
   width: 100%;
-  height: 100%;
+  height: 100%; /*Fallback*/
+  height: 100vh;
+  overflow-y: auto;
+  flex: 1 0 30%;
 }
 .right {
-  flex: 1 0 70%;
   width: 100%;
-  height: 100%;
+  height: 100%; /*Fallback*/
+  height: 100vh;
+  flex: 1 0 70%;
 }
+// @media (min-width: 1024px) {
+//   .left {
+//     flex: 1 0 30%;
+//   }
+//   .right {
+//     flex: 1 0 70%;
+//   }
+// }
+// @media (max-width: 1023px) {
+//   .left {
+//     flex: 1 0 20%;
+//   }
+//   .right {
+//     flex: 1 0 80%;
+//   }
+// }
+
+
 </style>

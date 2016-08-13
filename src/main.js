@@ -13,6 +13,7 @@ Vue.use(AsyncComputed);
 Vue.use(VueResource);
 Vue.use(VueRouter);
 Vue.use(VueMdl);
+
 const router = new VueRouter({
   hashbang: false,
   history: true,
@@ -31,12 +32,19 @@ const locales = {
     },
     estate: {
       type: 'Estate Type',
+      gid: 'Estate Id',
       category: {
         description: {
           apartment: 'Apartment',
           maisonete: 'Maisonette',
           detached_house: 'Detached House',
           villa: 'Villa',
+        },
+        id: {
+          id2: 'Apartment',
+          id3: 'Maisonette',
+          id4: 'Detached House',
+          id5: 'Villa',
         },
       },
       area: 'Estate area',
@@ -95,6 +103,10 @@ const locales = {
     message: {
       hello: 'hello world',
       atRoad: 'at road',
+      contactInfo: 'Contact Info',
+    },
+    user: {
+      phone: 'Τηλέφωνο',
     },
   },
   el: {
@@ -110,12 +122,19 @@ const locales = {
     },
     estate: {
       type: 'Τύπος Ιδιοκτησίας',
+      gid: 'Κωδικός Ιδιοκτησίας',
       category: {
         description: {
           apartment: 'Διαμέρισμα',
           maisonete: 'Μαιζονέτα',
           detached_house: 'Μονοκατοικία',
           villa: 'Έπαυλη',
+        },
+        id: {
+          id2: 'Διαμέρισμα',
+          id3: 'Μαιζονέτα',
+          id4: 'Μονοκατοικία',
+          id5: 'Έπαυλη',
         },
       },
       area: 'Εμβαδό ακινήτου',
@@ -174,6 +193,70 @@ const locales = {
     message: {
       hello: 'Καλημέρα',
       atRoad: 'στην οδό',
+      contactInfo: 'Στοιχεια Επικοινωνιας',
+    },
+    user: {
+      phone: 'Τηλέφωνο',
+    },
+    parishes: {
+      agios_nektarios: 'Agios Nektarios',
+      'ap.petrou_kai_pavlou': 'Ap.Petrou Kai Pavlou',
+      agia_triada: 'Agia Triada',
+      agia_zoni: 'Agia Zoni',
+      agia_napa: 'Agia Napa',
+      katholiki: 'Katholiki',
+      agios_ioannis: 'Agios Ioannis',
+      arnaout: 'Arnaout',
+      omonoia: 'Omonoia',
+      agios_nikolaos_lemesos: 'Agios Nikolaos (Lemesos)',
+      panagia_evagelistria: 'Panagia Evagelistria',
+      kontovathkeia: 'Kontovathkeia',
+      agios_andreas: 'Agios Andreas',
+      kapsalos: 'Kapsalos',
+      agia_fylaxis: 'Agia Fylaxis',
+      apostolos_varnavas: 'Apostolos Varnavas',
+      apostolos_andreas: 'Apostolos Andreas',
+      archangelos_michael: 'Archangelos Michael',
+      agios_spyridon: 'Agios Spyridon',
+      agios_nikolaos_Kato_Polemidia: 'Agios Nikolaos (Kato Polemidia)',
+      agios_georgios_lemesos: 'Agios Georgios (Lemesos)',
+      makarios_iii: 'Makarios III',
+      anthoupolis: 'Anthoupolis',
+      chalkoutsa: 'Chalkoutsa',
+      neapoli: 'Neapoli',
+      tzami_tzatit: 'Tzami Tzatit',
+      zakaki: 'Zakaki',
+      tsiflikoudia: 'Tsiflikoudia',
+      timiou_prodromou: 'Timiou Prodromou',
+      agios_antonios: 'Agios Antonios',
+      'pan._evangelistria': 'Pan. Evangelistria',
+      panthea: 'Panthea',
+      agios_loukas: 'Agios Loukas',
+      agia_paraskevi: 'Agia Paraskevi',
+      agios_georgios: 'Agios Georgios',
+      parekklisia: 'Parekklisia',
+      potamos_germasogeias: 'Potamos Germasogeias',
+      apostolos_loukas: 'Apostolos Loukas',
+      agios_athanasios: 'Agios Athanasios',
+      agios_stylianos: 'Agios Stylianos',
+      erimi: 'Erimi',
+      moni: 'Moni',
+      fasoula_lemesou: 'Fasoula Lemesou',
+      paramytha: 'Paramytha',
+      agios_tychon: 'Agios Tychon',
+      tserkezoi: 'Tserkezoi',
+      episkopi_lemesou: 'Episkopi Lemesou',
+      palodeia: 'Palodeia',
+      kantou: 'Kantou',
+      ypsonas: 'Ypsonas',
+      pano_polemidia: 'Pano Polemidia',
+      mesa_geitonia: 'Mesa Geitonia',
+      mouttagiaka: 'Mouttagiaka',
+      trachoni_lemesou: 'Trachoni Lemesou',
+      kolossi: 'Kolossi',
+      asomatos_lemesoy: 'Asomatos Lemesoy',
+      akrotiri: 'Akrotiri',
+      pyrgos: 'Pyrgos',
     },
   },
 };
@@ -200,6 +283,12 @@ router.map({
     name: 'hello',
     component(resolve) {
     require(['./components/hello'], resolve)  // eslint-disable-line
+    },
+  },
+  '/list': {
+    name: 'list',
+    component(resolve) {
+    require(['./components/list'], resolve)  // eslint-disable-line
     },
   },
   '/card/:gid': {
